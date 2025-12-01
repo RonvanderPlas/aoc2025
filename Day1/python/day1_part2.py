@@ -1,4 +1,4 @@
-input_file="input_test.txt"
+input_file="../input/input_test.txt"
 start_number=50
 def read_file(filename):
     with open(filename, "r") as f:
@@ -11,18 +11,19 @@ def main():
     zero_counter=0
     for line in lines:
         direction=line[0]
-        number= int(line[1:])
+        line_number= int(line[1:])
+        prev_counter = counter
         if direction=="R":
-            counter+=number
+            counter+=line_number
         elif direction=="L":
-            counter-=number
+            counter-=line_number
+
+        divided = counter // 100
         counter = counter % 100
-        print(counter)
+        zero_counter += abs(divided)
 
-
-        if counter==0:
-            zero_counter+=1
-            print(f"Zero hit {zero_counter} times")
+        print(f"Prev: {prev_counter}, entry: {direction}{line_number} New:{counter}, Divided: {divided}, Total zeros: {zero_counter}")
+    print(f"Total zero hits: {zero_counter}")
 
 if __name__ == "__main__":
 	main()
