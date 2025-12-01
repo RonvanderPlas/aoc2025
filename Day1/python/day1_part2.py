@@ -1,4 +1,4 @@
-input_file="input.txt"
+input_file="input_test.txt"
 start_number=50
 def read_file(filename):
     with open(filename, "r") as f:
@@ -17,6 +17,8 @@ def main():
         elif direction=="L":
             counter-=number
         counter = counter % 100
+        print(counter)
+
 
         if counter==0:
             zero_counter+=1
