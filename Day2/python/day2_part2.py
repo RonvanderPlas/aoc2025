@@ -1,4 +1,4 @@
-input_file="../input/input_test.txt"
+input_file="../input/input.txt"
 
 def read_file(filename):
     with open(filename, "r") as f:
@@ -9,15 +9,25 @@ def read_file(filename):
 
 def determine_patter_within_range(pattern_length, low, high):
     invalid_counter = 0
-    section_length = pattern_length // 2
-    starting_range = int(10 ** (section_length - 1))
-    ending_range = int((10 ** section_length) - 1)
-    #print(f"Pattern length: {pattern_length}, Low: {low}, High: {high}, Start Range: {starting_range}, End Range: {ending_range}")
-    for i in range(starting_range, ending_range + 1):
-        pattern = (i*(10**section_length)) + i
-        if low <= pattern <= high:
-            print(f"Invalid pattern: {pattern}")
-            invalid_counter += pattern
+    min_section_length = 1
+    max_section_length = pattern_length // 2
+    known_patterns = []
+
+    for section_length in range(min_section_length, max_section_length + 1):
+        starting_range = int(10 ** (section_length - 1))
+        ending_range = int((10 ** section_length) - 1)
+        print(f"Pattern length: {pattern_length}, Section Length: {section_length}, Low: {low}, High: {high}, Start Range: {starting_range}, End Range: {ending_range}")
+        
+        for i in range(starting_range, ending_range + 1):
+            pattern = i
+            for repeats in range(1, pattern_length // section_length):
+                pattern = pattern*(10**(section_length)) + i
+                #print(f"Generated pattern: {pattern}")
+                if low <= pattern <= high:
+                    print(f"Invalid pattern: {pattern}")
+                    if(pattern not in known_patterns):
+                        invalid_counter += pattern
+                        known_patterns.append(pattern)
     return invalid_counter
 
 def main():
@@ -25,7 +35,7 @@ def main():
     invalid_total = 0
     for input in inputs:
         low, high = input
-        pattern_length = max(len(str(low)), len(str(high)))
+        pattern_length = len(str(high))
         invalid_total += determine_patter_within_range(pattern_length, low, high)
     print(f"Total invalid patterns: {invalid_total}")
 
