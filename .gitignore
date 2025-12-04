@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.venv
+.env*
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Rust
+**/target/
+Cargo.lock
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Test and coverage
+.coverage
+htmlcov/
+*.cover
+*.pyc
+
+# Misc
+*.swp
+*.swo
+
+# Input files (if you want to ignore them)
+#Day*/input/*.txt
