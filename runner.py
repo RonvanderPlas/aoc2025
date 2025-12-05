@@ -8,7 +8,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run AoC puzzles with timing.")
     parser.add_argument("day", type=int, help="Day number (e.g., 1)")
     parser.add_argument("part", type=int, help="Part number (e.g., 1 or 2)")
-    parser.add_argument("--file", type=str, default=None, help="Path to input file")
+    parser.add_argument("--file", type=str, default=None, help="Path to input file (overrides -t)")
+    parser.add_argument("-t", "--test", action="store_true", help="Use test input file by default")
     parser.add_argument("--lang", type=str, default="python", choices=["python"], help="Language (default: python)")
     args = parser.parse_args()
 
@@ -40,6 +41,8 @@ def main():
     # Determine input file
     if args.file:
         input_path = f"Day{args.day}/input/{args.file}"
+    elif args.test:
+        input_path = f"Day{args.day}/input/input_test.txt"
     else:
         input_path = f"Day{args.day}/input/input.txt"
     if not os.path.exists(input_path):
