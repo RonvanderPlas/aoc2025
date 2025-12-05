@@ -1,0 +1,66 @@
+import argparse
+import importlib
+import os
+import sys
+import time
+
+def main():
+    parser = argparse.ArgumentParser(description="Run AoC puzzles with timing.")
+    parser.add_argument("day", type=int, help="Day number (e.g., 1)")
+    parser.add_argument("part", type=int, help="Part number (e.g., 1 or 2)")
+    parser.add_argument("--file", type=str, default=None, help="Path to input file")
+    parser.add_argument("--lang", type=str, default="python", choices=["python"], help="Language (default: python)")
+    args = parser.parse_args()
+
+    day_dir = f"Day{args.day}/python"
+    puzzle_file = f"day{args.day}.py"
+    puzzle_path = os.path.join(day_dir, puzzle_file)
+
+    if not os.path.exists(puzzle_path):
+        print(f"Puzzle file not found: {puzzle_path}")
+        sys.exit(1)
+
+    # Dynamic import
+    module_name = f"Day{args.day}.python.day{args.day}"
+    try:
+        puzzle_module = importlib.import_module(module_name)
+    except Exception as e:
+        print(f"Error importing module {module_name}: {e}")
+        sys.exit(1)
+
+    # Find Puzzle class
+    if args.part == 1:
+        puzzle_class = getattr(puzzle_module, "partA", None)
+    elif args.part == 2:
+        puzzle_class = getattr(puzzle_module, "partB", None)
+    if puzzle_class is None:
+        print(f"Puzzle class not found in {module_name}")
+        sys.exit(1)
+
+    # Determine input file
+    if args.file:
+        input_path = f"Day{args.day}/input/{args.file}"
+    else:
+        input_path = f"Day{args.day}/input/input.txt"
+    if not os.path.exists(input_path):
+        print(f"Input file not found: {input_path}")
+        sys.exit(1)
+
+    # Run and time
+    puzzle = puzzle_class()
+    start = time.time()
+    answer = puzzle.solve(input_path)
+    end = time.time()
+
+    print("\n" + "=" * 40)
+    print(f"🎄 Advent of Code Runner 🎄")
+    print("=" * 40)
+    print(f"Day:        {args.day}")
+    print(f"Part:       {args.part}")
+    print(f"Input file: {input_path}")
+    print(f"Execution:  {end - start:.6f} seconds")
+    print(f"Answer:     {answer}")
+    print("=" * 40 + "\n")
+
+if __name__ == "__main__":
+    main()
