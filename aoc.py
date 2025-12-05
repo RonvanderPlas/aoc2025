@@ -6,12 +6,33 @@ import time
 
 def main():
     parser = argparse.ArgumentParser(description="Run AoC puzzles with timing.")
-    parser.add_argument("day", type=int, help="Day number (e.g., 1)")
-    parser.add_argument("part", type=int, help="Part number (e.g., 1 or 2)")
+    parser.add_argument("day", type=int, nargs="?", help="Day number (e.g., 1)")
+    parser.add_argument("part", type=int, nargs="?", help="Part number (e.g., 1 or 2)")
     parser.add_argument("--file", type=str, default=None, help="Path to input file (overrides -t)")
     parser.add_argument("-t", "--test", action="store_true", help="Use test input file by default")
     parser.add_argument("--lang", type=str, default="python", choices=["python"], help="Language (default: python)")
+    parser.add_argument("--new-day", type=int, help="Create a blank template for a new day")
     args = parser.parse_args()
+    # Handle new day creation
+    if args.new_day:
+        dayN = args.new_day
+        day_dir = f"Day{dayN}"
+        python_dir = os.path.join(day_dir, "python")
+        input_dir = os.path.join(day_dir, "input")
+        os.makedirs(python_dir, exist_ok=True)
+        os.makedirs(input_dir, exist_ok=True)
+        # Create blank dayN.py
+        py_file = os.path.join(python_dir, f"day{dayN}.py")
+        if not os.path.exists(py_file):
+            with open(py_file, "w") as f:
+                f.write("class partA:\n    def solve(self, input_path):\n        pass\n\nclass partB:\n    def solve(self, input_path):\n        pass\n")
+        # Create blank input files
+        for fname in ["input.txt", "input_test.txt"]:
+            fpath = os.path.join(input_dir, fname)
+            if not os.path.exists(fpath):
+                open(fpath, "w").close()
+        print(f"Created template for Day {dayN} in {day_dir}/")
+        sys.exit(0)
 
     day_dir = f"Day{args.day}/python"
     puzzle_file = f"day{args.day}.py"
